@@ -10,6 +10,7 @@ export default function ColorSchemeButton(): HTMLButtonElement {
   // theme switch icon
   const csbutton = document.createElement("button");
   csbutton.className = "color-scheme-btn";
+  csbutton.title = "Theme";
 
   // make icon svg
   const svgNS = "http://www.w3.org/2000/svg";

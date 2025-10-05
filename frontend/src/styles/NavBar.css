@@ -1,6 +1,6 @@
 .navbar-div {
   width: 100dvw;
-  height: 4rem;
+  height: 4.5rem;
   display: flex;
   background-color: var(--navbar-bg);
   color: var(--text-color);
@@ -27,7 +27,7 @@
 
 .navbar-menu-images {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .navbar-menu-images img {

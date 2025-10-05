@@ -1,0 +1,140 @@
+.table-div {
+  display: flex;
+  flex-direction: column;
+  width: 100dvw;
+  min-height: 50dvh;
+  align-items: center;
+}
+
+.divider {
+  height: 1px;
+  background-color: lightgrey;
+}
+
+.table-content {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  margin: 3rem 0;
+}
+
+.table-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-header-content {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  font-weight: bold;
+  padding: 0.25rem 0;
+}
+
+.table-header-select-all {
+  display: flex;
+  justify-content: center;
+  width: 2.5%;
+}
+
+.table-header-name {
+  display: flex;
+  width: 60%;
+}
+
+.table-header-name button {
+  background-color: transparent;
+  color: var(--text-color);
+  font-weight: bold;
+  border: none;
+  padding: 0;
+}
+
+.table-header-updated {
+  display: flex;
+  width: 30%;
+  cursor: pointer;
+}
+
+.table-header-updated button {
+  background-color: transparent;
+  color: var(--text-color);
+  font-weight: bold;
+  border: none;
+  padding: 0;
+}
+
+.table-header-actions {
+  display: flex;
+  width: 7.5%;
+}
+
+.table-row-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 20rem;
+}
+
+.table-row {
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem 0;
+  gap: 1rem;
+}
+
+.table-row-select {
+  display: flex;
+  justify-content: center;
+  width: 2.5%;
+}
+
+.table-row-name {
+  display: flex;
+  width: 60%;
+}
+
+.table-row-updated {
+  display: flex;
+  width: 30%;
+}
+
+.table-row-actions {
+  display: flex;
+  gap: 1rem;
+  width: 7.5%;
+}
+
+.table-row-actions-edit {
+  display: flex;
+  cursor: pointer;
+}
+
+.table-row-actions-check {
+  display: flex;
+  cursor: pointer;
+}
+
+.table-footer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.table-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.table-footer button {
+  background-color: transparent;
+  color: var(--text-color);
+  border: none;
+  padding: 0.25rem;
+  margin: 0 0.375rem;
+}
+
+.table-footer button:hover {
+  font-weight: bold;
+}

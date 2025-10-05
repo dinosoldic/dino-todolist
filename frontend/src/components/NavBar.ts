@@ -1,4 +1,4 @@
-import { Ainz, Kumoko, Rimuru } from "../constants/images";
+import { Ainz, Kumoko, Rimuru } from "../constants/Images";
 import "../styles/NavBar.css";
 import ColorSchemeButton from "./ColorSchemeButton";
 
