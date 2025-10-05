@@ -1,6 +1,7 @@
 import { Ainz, Kumoko, Rimuru } from "../constants/Images";
 import "../styles/NavBar.css";
 import ColorSchemeButton from "./ColorSchemeButton";
+import { SharedTaskSwitch } from "../utils/SharedTaskSwitch";
 
 export default function NavBar(): HTMLDivElement {
   //navbar
@@ -9,6 +10,9 @@ export default function NavBar(): HTMLDivElement {
 
   const navbarMenu = document.createElement("div");
   navbarMenu.className = "navbar-menu";
+
+  const navbarMenuUtilContainer = document.createElement("div");
+  navbarMenuUtilContainer.className = "navbar-menu-util-container";
 
   // navbar text
   const navbarMenuText = document.createElement("div");
@@ -43,7 +47,9 @@ export default function NavBar(): HTMLDivElement {
   navbarMenuImages.appendChild(navbarImg3);
 
   navbarMenu.appendChild(navbarMenuText);
-  navbarMenu.appendChild(ThemeButton);
+  navbarMenu.appendChild(navbarMenuUtilContainer);
+  navbarMenuUtilContainer.appendChild(SharedTaskSwitch.element);
+  navbarMenuUtilContainer.appendChild(ThemeButton);
 
   return compBody;
 }

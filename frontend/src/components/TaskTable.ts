@@ -7,6 +7,7 @@ import {
   EditIcon,
 } from "../constants/SVGIcons";
 import "../styles/TaskTable.css";
+import { SharedTaskSwitch } from "../utils/SharedTaskSwitch";
 
 interface TaskTypes {
   id: number;
@@ -108,7 +109,7 @@ async function getTasks(serverUrl: string) {
       name: "Task 12",
       created: "2025-05-03",
       completed: "2025-05-03",
-      isCompleted: false,
+      isCompleted: true,
     },
   ];
   return tasks;
@@ -136,14 +137,32 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
   };
 
   let tasks: TaskTypes[] = [];
+  let allTasks: TaskTypes[] = [];
   let openTask: TaskTypes = defaultTask;
   let isAddMode: boolean = false;
   let isEditMode: boolean = false;
   let isSubmitting: boolean = false;
   let isDeleting: boolean = false;
-  let isOngoingTaskMode: boolean = true;
 
   let tasksToDelete: number[] = [];
+
+  // manage state of show completed
+  let isCompletedMode = SharedTaskSwitch.getState();
+
+  SharedTaskSwitch.onChange((state) => {
+    isCompletedMode = state;
+    filterAndRenderTasks();
+    renderPagination();
+    tableHeaderUpdatedBtn.title = isCompletedMode ? "Completed" : "Updated";
+    tableHeaderUpdatedBtn.textContent = isCompletedMode
+      ? "Completed"
+      : "Updated";
+    selectAllPages.clear();
+    selectedTasks.clear();
+    tableHeaderSelectAllCheckBox.checked = false;
+    tableHeaderSelectAllCheckBox.indeterminate = false;
+    updateHeaderActionsVisibility();
+  });
 
   const taskModal = createModal({
     width: "50%",
@@ -238,8 +257,8 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
   tableHeaderUpdated.className = "table-header-updated";
 
   const tableHeaderUpdatedBtn = document.createElement("button");
-  tableHeaderUpdatedBtn.textContent = "Updated";
-  tableHeaderUpdatedBtn.title = "Updated";
+  tableHeaderUpdatedBtn.title = isCompletedMode ? "Completed" : "Updated";
+  tableHeaderUpdatedBtn.textContent = isCompletedMode ? "Completed" : "Updated";
   tableHeaderUpdatedBtn.addEventListener("click", () => {
     const nextSort = sortOrder.updatedAsc ? "updatedDesc" : "updatedAsc";
     handleSortOrderChange(nextSort);
@@ -257,7 +276,14 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
   const tableHeaderActionsCheck = document.createElement("div");
   tableHeaderActionsCheck.className = "table-header-actions-check";
   tableHeaderActionsCheck.addEventListener("click", () => {
-    checkTasks(serverUrl, "/update-check-tasks", [...selectedTasks]);
+    const tasksToUpdate = [...selectedTasks]
+      .map((id) => {
+        const task = tasks.find((t) => t.id === id);
+        return task ? { id: task.id, isCompleted: !task.isCompleted } : null;
+      })
+      .filter(Boolean) as { id: number; isCompleted: boolean }[];
+
+    checkTasks(serverUrl, "/update-check-tasks", tasksToUpdate);
   });
 
   const tableHeaderActionsDelete = document.createElement("div");
@@ -345,9 +371,14 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
 
     if (pagedTasks.length === 0) {
       tableRowContainer.textContent = "No tasks found";
+      tableRowContainer.style.justifyContent = "center";
+      tableRowContainer.style.alignItems = "center";
       tableHeaderSelectAllCheckBox.checked = false;
       tableHeaderSelectAllCheckBox.indeterminate = false;
       return;
+    } else {
+      tableRowContainer.style.justifyContent = "";
+      tableRowContainer.style.alignItems = "";
     }
 
     // Set header checkbox based on current page state
@@ -441,7 +472,9 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
       actionsRowCheck.className = "table-row-actions-check";
       actionsRowCheck.title = "Mark as completed";
       actionsRowCheck.addEventListener("click", () => {
-        checkTasks(serverUrl, "/update-check-tasks", [task.id]);
+        checkTasks(serverUrl, "/update-check-tasks", [
+          { id: task.id, isCompleted: !task.isCompleted },
+        ]);
       });
       actionsRowCheck.appendChild(CheckIcon());
 
@@ -490,15 +523,16 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
       : "hidden";
   }
 
-  // fetch taaks
+  // fetch tasks
   getTasks(serverUrl).then((fetchedTasks) => {
-    if (isOngoingTaskMode) {
-      tasks = fetchedTasks.filter((task) => !task.isCompleted);
-    } else {
-      tasks = fetchedTasks.filter((task) => task.isCompleted);
-    }
-    renderTasks();
+    allTasks = fetchedTasks;
+    filterAndRenderTasks();
   });
+
+  function filterAndRenderTasks() {
+    tasks = allTasks.filter((task) => task.isCompleted === isCompletedMode);
+    renderTasks();
+  }
 
   // handle prev next page
   const handleNextPage = () => {
@@ -557,6 +591,8 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
     // remove old pagination first
     const oldPagination = tableContent.querySelector(".table-footer");
     if (oldPagination) oldPagination.remove();
+
+    if (totalPages === 0) return;
 
     const tableFooter = document.createElement("div");
     tableFooter.className = "table-footer";
@@ -658,10 +694,29 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
     const form = document.createElement("form");
     form.className = "table-form";
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (isAddMode) {
+
+      isSubmitting = true;
+
+      const taskName = nameInput.value.trim();
+      if (!taskName) {
+        nameInput.style.borderColor = "red";
+        return;
       } else {
+        nameInput.style.borderColor = "gray";
+      }
+
+      try {
+        if (isAddMode) {
+          await submitTasks(serverUrl, "/add-task", taskName);
+        } else {
+          await submitTasks(serverUrl, "/update-task", taskName, openTask.id);
+        }
+      } catch {
+        console.error("Error saving task");
+      } finally {
+        isSubmitting = false;
       }
     });
 
@@ -717,7 +772,9 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
 
     const formFooterActionsRightCheck = document.createElement("div");
     formFooterActionsRightCheck.addEventListener("click", () => {
-      checkTasks(serverUrl, "/update-check-tasks", [openTask.id]);
+      checkTasks(serverUrl, "/update-check-tasks", [
+        { id: openTask.id, isCompleted: !openTask.isCompleted },
+      ]);
     });
 
     const formFooterActionsRightDelete = document.createElement("div");
@@ -809,33 +866,29 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
   async function submitTasks(
     serverUrl: string,
     route: string,
-    taskname: string
+    taskname: string,
+    taskid?: number
   ) {
-    try {
-      isSubmitting = true;
-
-      taskModal.close();
-      renderTasks();
-    } catch {
-    } finally {
-      isSubmitting = false;
-    }
+    taskModal.close();
+    renderTasks();
   }
 
   async function checkTasks(
     serverUrl: string,
     route: string,
-    taskIDs: number[]
+    tasks: { id: number; isCompleted: boolean }[]
   ) {
     try {
-      console.log("completed:", taskIDs);
+      console.log("completed:", tasks);
 
       if (isEditMode) taskModal.close();
 
+      selectedTasks.clear();
+      selectAllPages.clear();
       updateHeaderActionsVisibility();
       renderTasks();
-    } catch (error) {
-    } finally {
+    } catch {
+      console.log("Error checking task");
     }
   }
 
