@@ -38,3 +38,52 @@ export function CheckIcon(size = 24): SVGElement {
   svg.appendChild(path);
   return svg;
 }
+
+export function AddIcon(size = 24): SVGElement {
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("width", String(size));
+  svg.setAttribute("height", String(size));
+  svg.setAttribute("fill", "currentColor");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("stroke-width", "0");
+
+  // invisible background path (optional, keeps same viewbox)
+  const bgPath = document.createElementNS(svgNS, "path");
+  bgPath.setAttribute("fill", "none");
+  bgPath.setAttribute("d", "M0 0h24v24H0z");
+  svg.appendChild(bgPath);
+
+  // main icon path
+  const path = document.createElementNS(svgNS, "path");
+  path.setAttribute(
+    "d",
+    "M22 5.18 10.59 16.6l-4.24-4.24 1.41-1.41 2.83 2.83 10-10L22 5.18zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8c1.57 0 3.04.46 4.28 1.25l1.45-1.45A10.02 10.02 0 0 0 12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.73 0 3.36-.44 4.78-1.22l-1.5-1.5c-1 .46-2.11.72-3.28.72zm7-5h-3v2h3v3h2v-3h3v-2h-3v-3h-2v3z"
+  );
+
+  svg.appendChild(path);
+  return svg;
+}
+
+export function DeleteIcon(size = 24): SVGElement {
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("width", String(size));
+  svg.setAttribute("height", String(size));
+  svg.setAttribute("fill", "currentColor");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("stroke-width", "0");
+
+  const path = document.createElementNS(svgNS, "path");
+  path.setAttribute(
+    "d",
+    "M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"
+  );
+
+  svg.appendChild(path);
+  return svg;
+}

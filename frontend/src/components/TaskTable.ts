@@ -1,12 +1,19 @@
-import { CheckIcon, EditIcon } from "../constants/SVGIcons";
 import { formatDate } from "../utils/FormatDate";
+import createModal from "../utils/Modal";
+import {
+  AddIcon,
+  CheckIcon,
+  DeleteIcon,
+  EditIcon,
+} from "../constants/SVGIcons";
 import "../styles/TaskTable.css";
 
 interface TaskTypes {
   id: number;
   name: string;
-  updated: string;
-  completed: boolean;
+  created: string;
+  completed: string;
+  isCompleted: boolean;
 }
 
 interface SortOrderTypes {
@@ -19,106 +26,90 @@ interface SortOrderTypes {
 // funcs
 async function getTasks(serverUrl: string) {
   const tasks: TaskTypes[] = [
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
-    { id: 1, name: "Task 1", updated: "2025-04-03", completed: false },
+    {
+      id: 1,
+      name: "Task 1",
+      created: "2025-04-03",
+      completed: "2025-04-03",
+      isCompleted: false,
+    },
+    {
+      id: 2,
+      name: "Task 2",
+      created: "2025-04-05",
+      completed: "2025-04-05",
+      isCompleted: false,
+    },
+    {
+      id: 3,
+      name: "Task 3",
+      created: "2025-04-10",
+      completed: "2025-04-10",
+      isCompleted: false,
+    },
+    {
+      id: 4,
+      name: "Task 4",
+      created: "2025-04-12",
+      completed: "2025-04-12",
+      isCompleted: false,
+    },
+    {
+      id: 5,
+      name: "Task 5",
+      created: "2025-04-15",
+      completed: "2025-04-15",
+      isCompleted: false,
+    },
+    {
+      id: 6,
+      name: "Task 6",
+      created: "2025-04-18",
+      completed: "2025-04-18",
+      isCompleted: false,
+    },
+    {
+      id: 7,
+      name: "Task 7",
+      created: "2025-04-20",
+      completed: "2025-04-20",
+      isCompleted: false,
+    },
+    {
+      id: 8,
+      name: "Task 8",
+      created: "2025-04-23",
+      completed: "2025-04-23",
+      isCompleted: false,
+    },
+    {
+      id: 9,
+      name: "Task 9",
+      created: "2025-04-25",
+      completed: "2025-04-25",
+      isCompleted: false,
+    },
+    {
+      id: 10,
+      name: "Task 10",
+      created: "2025-04-28",
+      completed: "2025-04-28",
+      isCompleted: false,
+    },
+    {
+      id: 11,
+      name: "Task 11",
+      created: "2025-05-01",
+      completed: "2025-05-01",
+      isCompleted: false,
+    },
+    {
+      id: 12,
+      name: "Task 12",
+      created: "2025-05-03",
+      completed: "2025-05-03",
+      isCompleted: false,
+    },
   ];
   return tasks;
   //   try {
@@ -134,8 +125,64 @@ async function getTasks(serverUrl: string) {
 
 // main func
 export default function TaskTable(serverUrl: string): HTMLDivElement {
-  // html components
-  // body
+  //// vars
+  // tasks
+  let defaultTask: TaskTypes = {
+    id: NaN,
+    name: "",
+    created: "",
+    completed: "",
+    isCompleted: false,
+  };
+
+  let tasks: TaskTypes[] = [];
+  let openTask: TaskTypes = defaultTask;
+  let isAddMode: boolean = false;
+  let isEditMode: boolean = false;
+  let isSubmitting: boolean = false;
+  let isDeleting: boolean = false;
+  let isOngoingTaskMode: boolean = true;
+
+  let tasksToDelete: number[] = [];
+
+  const taskModal = createModal({
+    width: "50%",
+    height: "15rem",
+    onClose() {
+      isAddMode ? (isAddMode = false) : (isEditMode = false);
+      openTask = defaultTask;
+    },
+  });
+
+  const deleteModal = createModal({
+    width: "30%",
+    height: "10rem",
+    onClose() {
+      tasksToDelete = [];
+    },
+  });
+
+  // sorting
+  let sortOrder: SortOrderTypes = {
+    updatedAsc: false,
+    updatedDesc: true, // default: newest first
+    nameAsc: false,
+    nameDesc: false,
+  };
+
+  // check track
+  let selectedTasks: Set<number> = new Set();
+  const selectAllPages = new Map<number, 0 | 1 | 2>(); // 0 = none selected, 1 = some selected (indeterminate), 2 = all selected
+
+  // paging
+  let currentPage: number = 1;
+  const tasksPerPage: number = 10;
+
+  let totalPages: number = 0;
+  const maxVisiblePages: number = 5;
+  const pageSkip: number = 5;
+
+  //// body
   const compBody = document.createElement("div");
   compBody.className = "table-div";
 
@@ -144,6 +191,18 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
 
   const divider2 = document.createElement("div");
   divider2.className = "divider";
+
+  const divider3 = document.createElement("div");
+  divider3.className = "divider";
+
+  const divider4 = document.createElement("div");
+  divider4.className = "divider";
+
+  const divider5 = document.createElement("div");
+  divider5.className = "divider";
+
+  const divider6 = document.createElement("div");
+  divider6.className = "divider";
 
   // table
   const tableContent = document.createElement("div");
@@ -189,6 +248,24 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
   const tableHeaderActions = document.createElement("div");
   tableHeaderActions.className = "table-header-actions";
 
+  const tableHeaderActionsAdd = document.createElement("div");
+  tableHeaderActionsAdd.className = "table-header-actions-add";
+  tableHeaderActionsAdd.addEventListener("click", () => {
+    handleModalOpen("add");
+  });
+
+  const tableHeaderActionsCheck = document.createElement("div");
+  tableHeaderActionsCheck.className = "table-header-actions-check";
+  tableHeaderActionsCheck.addEventListener("click", () => {
+    checkTasks(serverUrl, "/update-check-tasks", [...selectedTasks]);
+  });
+
+  const tableHeaderActionsDelete = document.createElement("div");
+  tableHeaderActionsDelete.className = "table-header-actions-delete";
+  tableHeaderActionsDelete.addEventListener("click", () => {
+    handleDeleteModalOpen([...selectedTasks]);
+  });
+
   const tableRowContainer = document.createElement("div"); // container for future rows
   tableRowContainer.className = "table-row-container";
 
@@ -203,22 +280,24 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
   tableHeaderName.appendChild(tableHeaderNameBtn);
   tableHeaderContent.appendChild(tableHeaderUpdated);
   tableHeaderUpdated.appendChild(tableHeaderUpdatedBtn);
+
   tableHeaderContent.appendChild(tableHeaderActions);
+  tableHeaderActions.appendChild(tableHeaderActionsAdd);
+  tableHeaderActionsAdd.appendChild(AddIcon());
+
+  tableHeaderActions.appendChild(tableHeaderActionsCheck);
+  tableHeaderActionsCheck.appendChild(CheckIcon());
+
+  tableHeaderActions.appendChild(tableHeaderActionsDelete);
+  tableHeaderActionsDelete.appendChild(DeleteIcon());
+
   tableHeader.appendChild(divider);
 
   tableContent.appendChild(tableRowContainer);
 
+  updateHeaderActionsVisibility(); // set initial visibilty
+
   //// Fetch and render tasks table rows
-  let tasks: TaskTypes[] = [];
-
-  // sorting
-  let sortOrder: SortOrderTypes = {
-    updatedAsc: false,
-    updatedDesc: true, // default: newest first
-    nameAsc: false,
-    nameDesc: false,
-  };
-
   // Function to change sort order
   function handleSortOrderChange(selectedSort: keyof SortOrderTypes) {
     sortOrder = {
@@ -233,26 +312,23 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
   }
 
   // Sorting logic
+  const collator = new Intl.Collator(undefined, {
+    numeric: true,
+    sensitivity: "base",
+  });
+
   function sortTasks(tasks: TaskTypes[], sortOrder: SortOrderTypes) {
     return tasks.sort((a, b) => {
-      if (sortOrder.nameAsc) return a.name.localeCompare(b.name);
-      if (sortOrder.nameDesc) return b.name.localeCompare(a.name);
+      if (sortOrder.nameAsc) return collator.compare(a.name, b.name);
+      if (sortOrder.nameDesc) return collator.compare(b.name, a.name);
       if (sortOrder.updatedAsc)
-        return new Date(a.updated).getTime() - new Date(b.updated).getTime();
+        return new Date(a.created).getTime() - new Date(b.created).getTime();
       if (sortOrder.updatedDesc)
-        return new Date(b.updated).getTime() - new Date(a.updated).getTime();
+        return new Date(b.created).getTime() - new Date(a.created).getTime();
 
-      return new Date(b.updated).getTime() - new Date(a.updated).getTime();
+      return new Date(b.created).getTime() - new Date(a.created).getTime();
     });
   }
-
-  // paging
-  let currentPage: number = 1;
-  const tasksPerPage: number = 10;
-
-  let totalPages: number = 0;
-  const maxVisiblePages: number = 5;
-  const pageSkip: number = 5;
 
   // display data
   function renderTasks() {
@@ -269,7 +345,26 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
 
     if (pagedTasks.length === 0) {
       tableRowContainer.textContent = "No tasks found";
+      tableHeaderSelectAllCheckBox.checked = false;
+      tableHeaderSelectAllCheckBox.indeterminate = false;
       return;
+    }
+
+    // Set header checkbox based on current page state
+    const pageState = selectAllPages.get(currentPage) ?? 0;
+    switch (pageState) {
+      case 0:
+        tableHeaderSelectAllCheckBox.checked = false;
+        tableHeaderSelectAllCheckBox.indeterminate = false;
+        break;
+      case 1:
+        tableHeaderSelectAllCheckBox.checked = false;
+        tableHeaderSelectAllCheckBox.indeterminate = true;
+        break;
+      case 2:
+        tableHeaderSelectAllCheckBox.checked = true;
+        tableHeaderSelectAllCheckBox.indeterminate = false;
+        break;
     }
 
     pagedTasks.forEach((task) => {
@@ -280,6 +375,47 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
       selectRow.className = "table-row-select";
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
+
+      // keep row checkbox state in sync
+      checkbox.checked = selectedTasks.has(task.id);
+
+      // row checkbox change
+      checkbox.addEventListener("change", () => {
+        if (checkbox.checked) {
+          selectedTasks.add(task.id);
+        } else {
+          selectedTasks.delete(task.id);
+        }
+
+        updateHeaderActionsVisibility();
+
+        // Update header checkbox state for this page
+        const allSelected = pagedTasks.every((t) => selectedTasks.has(t.id));
+        const noneSelected = pagedTasks.every((t) => !selectedTasks.has(t.id));
+        let newState: 0 | 1 | 2 = 0;
+        if (allSelected) newState = 2;
+        else if (!noneSelected) newState = 1;
+        else newState = 0;
+
+        selectAllPages.set(currentPage, newState);
+
+        // update header checkbox visually
+        switch (newState) {
+          case 0:
+            tableHeaderSelectAllCheckBox.checked = false;
+            tableHeaderSelectAllCheckBox.indeterminate = false;
+            break;
+          case 1:
+            tableHeaderSelectAllCheckBox.checked = false;
+            tableHeaderSelectAllCheckBox.indeterminate = true;
+            break;
+          case 2:
+            tableHeaderSelectAllCheckBox.checked = true;
+            tableHeaderSelectAllCheckBox.indeterminate = false;
+            break;
+        }
+      });
+
       selectRow.appendChild(checkbox);
 
       const nameRow = document.createElement("div");
@@ -288,7 +424,7 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
 
       const updatedRow = document.createElement("div");
       updatedRow.className = "table-row-updated";
-      updatedRow.textContent = formatDate(task.updated);
+      updatedRow.textContent = formatDate(task.created);
 
       const actionsRow = document.createElement("div");
       actionsRow.className = "table-row-actions";
@@ -296,11 +432,17 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
       const actionsRowEdit = document.createElement("div");
       actionsRowEdit.className = "table-row-actions-edit";
       actionsRowEdit.title = "Edit task";
+      actionsRowEdit.addEventListener("click", () => {
+        handleModalOpen("edit", task);
+      });
       actionsRowEdit.appendChild(EditIcon());
 
       const actionsRowCheck = document.createElement("div");
       actionsRowCheck.className = "table-row-actions-check";
       actionsRowCheck.title = "Mark as completed";
+      actionsRowCheck.addEventListener("click", () => {
+        checkTasks(serverUrl, "/update-check-tasks", [task.id]);
+      });
       actionsRowCheck.appendChild(CheckIcon());
 
       actionsRow.appendChild(actionsRowEdit);
@@ -317,9 +459,44 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
     renderPagination();
   }
 
+  // Header checkbox change for current page
+  tableHeaderSelectAllCheckBox.onchange = () => {
+    const sortedTasks = sortTasks(tasks, sortOrder);
+    const pagedTasks = sortedTasks.slice(
+      (currentPage - 1) * tasksPerPage,
+      currentPage * tasksPerPage
+    );
+
+    if (tableHeaderSelectAllCheckBox.checked) {
+      pagedTasks.forEach((t) => selectedTasks.add(t.id));
+      selectAllPages.set(currentPage, 2);
+    } else {
+      pagedTasks.forEach((t) => selectedTasks.delete(t.id));
+      selectAllPages.set(currentPage, 0);
+    }
+    updateHeaderActionsVisibility();
+
+    renderTasks(); // re-render to sync checkboxes
+  };
+
+  // show header icons
+  function updateHeaderActionsVisibility() {
+    const isAnySelected = selectedTasks.size > 0;
+    tableHeaderActionsCheck.style.visibility = isAnySelected
+      ? "visible"
+      : "hidden";
+    tableHeaderActionsDelete.style.visibility = isAnySelected
+      ? "visible"
+      : "hidden";
+  }
+
   // fetch taaks
   getTasks(serverUrl).then((fetchedTasks) => {
-    tasks = fetchedTasks.filter((task) => !task.completed);
+    if (isOngoingTaskMode) {
+      tasks = fetchedTasks.filter((task) => !task.isCompleted);
+    } else {
+      tasks = fetchedTasks.filter((task) => task.isCompleted);
+    }
     renderTasks();
   });
 
@@ -462,5 +639,230 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
     tableFooter.appendChild(tableFooter5Next);
     tableFooter5Next.appendChild(tableFooter5NextBtn);
   }
+
+  // modal open
+  function handleModalOpen(type: string, task?: TaskTypes) {
+    if (type === "edit") {
+      isEditMode = true;
+      openTask = task ?? defaultTask;
+    } else {
+      isAddMode = true;
+      openTask = defaultTask;
+    }
+    taskModal.open();
+    renderForm();
+  }
+
+  // form
+  function renderForm() {
+    const form = document.createElement("form");
+    form.className = "table-form";
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (isAddMode) {
+      } else {
+      }
+    });
+
+    const formTitle = document.createElement("div");
+    formTitle.className = "table-form-title";
+    formTitle.textContent = isAddMode ? "Add Task" : "Edit Task";
+
+    const formBody = document.createElement("div");
+    formBody.className = "table-form-body";
+
+    const name = document.createElement("div");
+    name.className = "table-form-body-name";
+
+    const nameTitle = document.createElement("div");
+    nameTitle.className = "table-form-body-name-title";
+    nameTitle.textContent = "Task Name";
+
+    const nameInput = document.createElement("input");
+    nameInput.className = "table-form-body-name-input";
+    nameInput.id = "name";
+    nameInput.type = "text";
+    nameInput.placeholder = "Input task name";
+    nameInput.value = openTask.name;
+
+    const formFooter = document.createElement("div");
+    formFooter.className = "table-form-footer";
+
+    const formFooterActionsContainer = document.createElement("div");
+    formFooterActionsContainer.className = "table-form-footer-actions";
+
+    const formFooterActionsLeft = document.createElement("div");
+    formFooterActionsLeft.className = "table-form-footer-left";
+
+    const submitBtn = document.createElement("button");
+    submitBtn.className = "table-form-footer-submit";
+    submitBtn.type = "submit";
+    submitBtn.disabled = isSubmitting;
+    submitBtn.title = "Save";
+    submitBtn.textContent = "Save";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.className = "table-form-footer-cancel";
+    cancelBtn.type = "button";
+    cancelBtn.title = "Cancel";
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.addEventListener("click", () => {
+      taskModal.close();
+    });
+
+    const formFooterActionsRight = document.createElement("div");
+    formFooterActionsRight.className = "table-form-footer-right";
+    formFooterActionsRight.style.visibility = isEditMode ? "visible" : "hidden";
+
+    const formFooterActionsRightCheck = document.createElement("div");
+    formFooterActionsRightCheck.addEventListener("click", () => {
+      checkTasks(serverUrl, "/update-check-tasks", [openTask.id]);
+    });
+
+    const formFooterActionsRightDelete = document.createElement("div");
+    formFooterActionsRightDelete.addEventListener("click", () => {
+      handleDeleteModalOpen([openTask.id]);
+    });
+
+    form.appendChild(formTitle);
+    formTitle.appendChild(divider3);
+
+    form.appendChild(formBody);
+    formBody.appendChild(name);
+    name.appendChild(nameTitle);
+    name.appendChild(nameInput);
+
+    formBody.appendChild(formFooter);
+    formFooter.appendChild(divider4);
+    formFooter.appendChild(formFooterActionsContainer);
+    formFooterActionsContainer.appendChild(formFooterActionsLeft);
+    formFooterActionsLeft.appendChild(submitBtn);
+    formFooterActionsLeft.appendChild(cancelBtn);
+    formFooterActionsContainer.appendChild(formFooterActionsRight);
+    formFooterActionsRight.appendChild(formFooterActionsRightCheck);
+    formFooterActionsRightCheck.appendChild(CheckIcon());
+    formFooterActionsRight.appendChild(formFooterActionsRightDelete);
+    formFooterActionsRightDelete.appendChild(DeleteIcon());
+
+    // Add/edit modals
+    taskModal.appendChild(form);
+  }
+
+  function handleDeleteModalOpen(taskIDs: number[]) {
+    tasksToDelete = taskIDs;
+    deleteModal.open();
+    renderDeleteForm();
+  }
+
+  function renderDeleteForm() {
+    const form = document.createElement("div");
+    form.className = "delete-form";
+
+    const formTitle = document.createElement("div");
+    formTitle.className = "delete-form-title";
+    formTitle.textContent = "Delete Task";
+
+    const formBody = document.createElement("div");
+    formBody.className = "delete-form-body";
+    formBody.textContent = "Are you sure that you wish to delete these tasks?";
+
+    const formFooter = document.createElement("div");
+    formFooter.className = "delete-form-footer";
+
+    const formFooterActionsContainer = document.createElement("div");
+    formFooterActionsContainer.className = "delete-form-footer-actions";
+
+    const submitBtn = document.createElement("button");
+    submitBtn.className = "delete-form-footer-submit";
+    submitBtn.disabled = isDeleting;
+    submitBtn.title = "Delete";
+    submitBtn.textContent = "Delete";
+    submitBtn.addEventListener("click", () => {
+      deleteTasks(serverUrl, "/delete-tasks", tasksToDelete);
+    });
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.className = "delete-form-footer-cancel";
+    cancelBtn.type = "button";
+    cancelBtn.title = "Cancel";
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.addEventListener("click", () => {
+      deleteModal.close();
+    });
+
+    form.appendChild(formTitle);
+    formTitle.appendChild(divider5);
+
+    form.appendChild(formBody);
+
+    formBody.appendChild(formFooter);
+    formFooter.appendChild(divider6);
+    formFooter.appendChild(formFooterActionsContainer);
+    formFooterActionsContainer.appendChild(submitBtn);
+    formFooterActionsContainer.appendChild(cancelBtn);
+
+    deleteModal.appendChild(form);
+  }
+
+  // async funcs
+  async function submitTasks(
+    serverUrl: string,
+    route: string,
+    taskname: string
+  ) {
+    try {
+      isSubmitting = true;
+
+      taskModal.close();
+      renderTasks();
+    } catch {
+    } finally {
+      isSubmitting = false;
+    }
+  }
+
+  async function checkTasks(
+    serverUrl: string,
+    route: string,
+    taskIDs: number[]
+  ) {
+    try {
+      console.log("completed:", taskIDs);
+
+      if (isEditMode) taskModal.close();
+
+      updateHeaderActionsVisibility();
+      renderTasks();
+    } catch (error) {
+    } finally {
+    }
+  }
+
+  async function deleteTasks(
+    serverUrl: string,
+    route: string,
+    taskIDs: number[]
+  ) {
+    try {
+      isDeleting = true;
+      console.log("deleted:", taskIDs);
+
+      deleteModal.close();
+      selectedTasks.clear();
+      selectAllPages.clear();
+      tasksToDelete = [];
+
+      if (isEditMode) taskModal.close();
+
+      updateHeaderActionsVisibility();
+      renderTasks();
+    } catch {
+      console.log("Error deleting tasks");
+    } finally {
+      isDeleting = false;
+    }
+  }
+
   return compBody;
 }

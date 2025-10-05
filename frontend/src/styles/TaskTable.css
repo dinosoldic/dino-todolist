@@ -52,7 +52,7 @@
 
 .table-header-updated {
   display: flex;
-  width: 30%;
+  width: 26%;
   cursor: pointer;
 }
 
@@ -66,13 +66,18 @@
 
 .table-header-actions {
   display: flex;
-  width: 7.5%;
+  gap: 1rem;
+  width: 11.5%;
+}
+.table-header-actions div {
+  display: flex;
+  cursor: pointer;
 }
 
 .table-row-container {
   display: flex;
   flex-direction: column;
-  min-height: 20rem;
+  min-height: 25rem;
 }
 
 .table-row {
@@ -95,21 +100,16 @@
 
 .table-row-updated {
   display: flex;
-  width: 30%;
+  width: 26%;
 }
 
 .table-row-actions {
   display: flex;
   gap: 1rem;
-  width: 7.5%;
+  width: 11.5%;
 }
 
-.table-row-actions-edit {
-  display: flex;
-  cursor: pointer;
-}
-
-.table-row-actions-check {
+.table-row-actions div {
   display: flex;
   cursor: pointer;
 }
@@ -137,4 +137,138 @@
 
 .table-footer button:hover {
   font-weight: bold;
+}
+
+.table-form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.table-form-title {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-weight: bold;
+}
+
+.table-form-body {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.25rem;
+}
+
+.table-form-body-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-form-body-name-input {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  height: 1.5rem;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.table-form-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+}
+
+.table-form-footer-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0.25rem;
+}
+
+.table-form-footer-left {
+  display: flex;
+  gap: 1rem;
+}
+
+.table-form-footer-left button {
+  background: transparent;
+  color: var(--text-color);
+  font-weight: bold;
+  padding: 0.25rem;
+}
+
+.table-form-footer-submit,
+.table-form-footer-submit:hover {
+  border: 1px solid turquoise;
+}
+
+.table-form-footer-cancel,
+.table-form-footer-cancel:hover {
+  border: 1px solid red;
+}
+
+.table-form-footer-right {
+  display: flex;
+  gap: 1rem;
+}
+
+.table-form-footer-right div {
+  display: flex;
+  cursor: pointer;
+}
+
+.delete-form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.delete-form-title {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-weight: bold;
+}
+
+.delete-form-body {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.25rem;
+}
+
+.delete-form-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+}
+
+.delete-form-footer-actions {
+  display: flex;
+  gap: 1rem;
+  padding: 0.25rem 0.25rem;
+}
+
+.delete-form-footer-actions button {
+  background: transparent;
+  color: var(--text-color);
+  font-weight: bold;
+  padding: 0.25rem;
+}
+
+.delete-form-footer-submit,
+.delete-form-footer-submit:hover {
+  border: 1px solid turquoise;
+}
+
+.delete-form-footer-cancel,
+.delete-form-footer-cancel:hover {
+  border: 1px solid red;
 }
