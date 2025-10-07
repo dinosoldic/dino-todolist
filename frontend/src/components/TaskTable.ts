@@ -283,7 +283,7 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
       })
       .filter(Boolean) as { id: number; isCompleted: boolean }[];
 
-    checkTasks(serverUrl, "/update-check-tasks", tasksToUpdate);
+    checkTasks(tasksToUpdate);
   });
 
   const tableHeaderActionsDelete = document.createElement("div");
@@ -472,9 +472,7 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
       actionsRowCheck.className = "table-row-actions-check";
       actionsRowCheck.title = "Mark as completed";
       actionsRowCheck.addEventListener("click", () => {
-        checkTasks(serverUrl, "/update-check-tasks", [
-          { id: task.id, isCompleted: !task.isCompleted },
-        ]);
+        checkTasks([{ id: task.id, isCompleted: !task.isCompleted }]);
       });
       actionsRowCheck.appendChild(CheckIcon());
 
@@ -707,16 +705,10 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
         nameInput.style.borderColor = "gray";
       }
 
-      try {
-        if (isAddMode) {
-          await submitTasks(serverUrl, "/add-task", taskName);
-        } else {
-          await submitTasks(serverUrl, "/update-task", taskName, openTask.id);
-        }
-      } catch {
-        console.error("Error saving task");
-      } finally {
-        isSubmitting = false;
+      if (isAddMode) {
+        await submitTasks("/add-task", taskName);
+      } else {
+        await submitTasks("/update-task", taskName, openTask.id);
       }
     });
 
@@ -772,9 +764,7 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
 
     const formFooterActionsRightCheck = document.createElement("div");
     formFooterActionsRightCheck.addEventListener("click", () => {
-      checkTasks(serverUrl, "/update-check-tasks", [
-        { id: openTask.id, isCompleted: !openTask.isCompleted },
-      ]);
+      checkTasks([{ id: openTask.id, isCompleted: !openTask.isCompleted }]);
     });
 
     const formFooterActionsRightDelete = document.createElement("div");
@@ -836,7 +826,7 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
     submitBtn.title = "Delete";
     submitBtn.textContent = "Delete";
     submitBtn.addEventListener("click", () => {
-      deleteTasks(serverUrl, "/delete-tasks", tasksToDelete);
+      deleteTasks(tasksToDelete);
     });
 
     const cancelBtn = document.createElement("button");
@@ -864,22 +854,48 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
 
   // async funcs
   async function submitTasks(
-    serverUrl: string,
     route: string,
     taskname: string,
-    taskid?: number
-  ) {
-    taskModal.close();
-    renderTasks();
-  }
-
-  async function checkTasks(
-    serverUrl: string,
-    route: string,
-    tasks: { id: number; isCompleted: boolean }[]
+    taskid: number = NaN
   ) {
     try {
+      isSubmitting = true;
+
+      const res = await fetch(`${serverUrl}${route}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ taskname, taskid }),
+      });
+
+      if (!res.ok) {
+        throw new Error();
+      }
+
+      taskModal.close();
+      selectedTasks.clear();
+      selectAllPages.clear();
+      updateHeaderActionsVisibility();
+      renderTasks();
+    } catch {
+      console.log("Error saving task");
+    } finally {
+      isSubmitting = false;
+    }
+  }
+
+  async function checkTasks(tasks: { id: number; isCompleted: boolean }[]) {
+    try {
       console.log("completed:", tasks);
+
+      const res = await fetch(`${serverUrl}/update-check-tasks`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(tasks),
+      });
+
+      if (!res.ok) {
+        throw new Error();
+      }
 
       if (isEditMode) taskModal.close();
 
@@ -892,14 +908,20 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
     }
   }
 
-  async function deleteTasks(
-    serverUrl: string,
-    route: string,
-    taskIDs: number[]
-  ) {
+  async function deleteTasks(taskIDs: number[]) {
     try {
       isDeleting = true;
       console.log("deleted:", taskIDs);
+
+      const res = await fetch(`${serverUrl}/delete-tasks`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: taskIDs }),
+      });
+
+      if (!res.ok) {
+        throw new Error();
+      }
 
       deleteModal.close();
       selectedTasks.clear();
