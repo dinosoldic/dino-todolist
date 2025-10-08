@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES6", // Compile to ES6 JavaScript
+    "module": "commonjs", // Node-style imports/exports
+    "rootDir": "./src", // Source files in src/
+    "outDir": "./dist", // Compiled JS goes to dist/
+    "esModuleInterop": true, // Allows `import express from "express"`
+    "strict": true, // Enables strict type checking
+    "sourceMap": true, // Generates .map files for easier debugging
+    "noUnusedLocals": true, // Error on unused variables
+    "noUnusedParameters": true // Error on unused function parameters
+  },
+  "include": ["src/**/*"]
+}

@@ -1,0 +1,7 @@
+.color-scheme-btn {
+  background-color: transparent;
+  color: var(--csbutton-text);
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+}
