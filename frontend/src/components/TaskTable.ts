@@ -28,7 +28,7 @@ interface SortOrderTypes {
 // funcs
 async function getTasks(serverUrl: string) {
   try {
-    const res = await fetch(`${serverUrl}/get-tasks`);
+    const res = await fetch(`${serverUrl}/get-tasks?t=${Date.now()}`);
     if (!res.ok) throw new Error();
     const rawTasks = await res.json();
 
