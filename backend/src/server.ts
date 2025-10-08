@@ -1,9 +1,11 @@
-import express from "express";
 import dotenv from "dotenv";
+import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 
-dotenv.config();
+dotenv.config(); // import dotenv first for correct env usage
+
+import { TasksRoutes } from "./routes";
 
 const PORT: number = parseInt(process.env.PORT as string, 10);
 const app = express();
@@ -25,6 +27,7 @@ app.use(
 app.use(express.json());
 
 // Routes
+app.use(TasksRoutes);
 
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)

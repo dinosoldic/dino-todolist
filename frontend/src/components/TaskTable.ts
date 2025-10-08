@@ -12,9 +12,10 @@ import { SharedTaskSwitch } from "../utils/SharedTaskSwitch";
 interface TaskTypes {
   id: number;
   name: string;
-  created: string;
-  completed: string;
   isCompleted: boolean;
+  completed: Date | null;
+  created: Date;
+  updated: Date;
 }
 
 interface SortOrderTypes {
@@ -26,102 +27,25 @@ interface SortOrderTypes {
 
 // funcs
 async function getTasks(serverUrl: string) {
-  const tasks: TaskTypes[] = [
-    {
-      id: 1,
-      name: "Task 1",
-      created: "2025-04-03",
-      completed: "2025-04-03",
-      isCompleted: false,
-    },
-    {
-      id: 2,
-      name: "Task 2",
-      created: "2025-04-05",
-      completed: "2025-04-05",
-      isCompleted: false,
-    },
-    {
-      id: 3,
-      name: "Task 3",
-      created: "2025-04-10",
-      completed: "2025-04-10",
-      isCompleted: false,
-    },
-    {
-      id: 4,
-      name: "Task 4",
-      created: "2025-04-12",
-      completed: "2025-04-12",
-      isCompleted: false,
-    },
-    {
-      id: 5,
-      name: "Task 5",
-      created: "2025-04-15",
-      completed: "2025-04-15",
-      isCompleted: false,
-    },
-    {
-      id: 6,
-      name: "Task 6",
-      created: "2025-04-18",
-      completed: "2025-04-18",
-      isCompleted: false,
-    },
-    {
-      id: 7,
-      name: "Task 7",
-      created: "2025-04-20",
-      completed: "2025-04-20",
-      isCompleted: false,
-    },
-    {
-      id: 8,
-      name: "Task 8",
-      created: "2025-04-23",
-      completed: "2025-04-23",
-      isCompleted: false,
-    },
-    {
-      id: 9,
-      name: "Task 9",
-      created: "2025-04-25",
-      completed: "2025-04-25",
-      isCompleted: false,
-    },
-    {
-      id: 10,
-      name: "Task 10",
-      created: "2025-04-28",
-      completed: "2025-04-28",
-      isCompleted: false,
-    },
-    {
-      id: 11,
-      name: "Task 11",
-      created: "2025-05-01",
-      completed: "2025-05-01",
-      isCompleted: false,
-    },
-    {
-      id: 12,
-      name: "Task 12",
-      created: "2025-05-03",
-      completed: "2025-05-03",
-      isCompleted: true,
-    },
-  ];
-  return tasks;
-  //   try {
-  //     const response = await fetch(`${serverUrl}/tasks`);
-  //     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-  //     const tasks = await response.json();
-  //     return tasks; // array of task objects
-  //   } catch (error) {
-  //     console.error("Failed to fetch tasks:", error);
-  //     return [];
-  //   }
+  try {
+    const res = await fetch(`${serverUrl}/get-tasks`);
+    if (!res.ok) throw new Error();
+    const rawTasks = await res.json();
+
+    const tasks: TaskTypes[] = rawTasks.map((task: any) => ({
+      id: Number(task.id),
+      name: task.name,
+      isCompleted: task.iscompleted === true || task.iscompleted === "true",
+      completed: task.completed ? new Date(task.completed) : null,
+      created: new Date(task.created_at),
+      updated: new Date(task.updated_at),
+    }));
+
+    return tasks;
+  } catch (error) {
+    console.error("Failed to fetch tasks");
+    return [];
+  }
 }
 
 // main func
@@ -131,9 +55,10 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
   let defaultTask: TaskTypes = {
     id: NaN,
     name: "",
-    created: "",
-    completed: "",
+    completed: null,
     isCompleted: false,
+    created: new Date(),
+    updated: new Date(),
   };
 
   let tasks: TaskTypes[] = [];
@@ -527,8 +452,15 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
     filterAndRenderTasks();
   });
 
+  async function refreshTasks() {
+    allTasks = await getTasks(serverUrl);
+    filterAndRenderTasks();
+  }
+
   function filterAndRenderTasks() {
-    tasks = allTasks.filter((task) => task.isCompleted === isCompletedMode);
+    tasks = allTasks.filter(
+      (task) => Boolean(task.isCompleted) === isCompletedMode
+    );
     renderTasks();
   }
 
@@ -875,7 +807,8 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
       selectedTasks.clear();
       selectAllPages.clear();
       updateHeaderActionsVisibility();
-      renderTasks();
+
+      await refreshTasks();
     } catch {
       console.log("Error saving task");
     } finally {
@@ -885,8 +818,6 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
 
   async function checkTasks(tasks: { id: number; isCompleted: boolean }[]) {
     try {
-      console.log("completed:", tasks);
-
       const res = await fetch(`${serverUrl}/update-check-tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -902,7 +833,8 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
       selectedTasks.clear();
       selectAllPages.clear();
       updateHeaderActionsVisibility();
-      renderTasks();
+
+      await refreshTasks();
     } catch {
       console.log("Error checking task");
     }
@@ -911,7 +843,6 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
   async function deleteTasks(taskIDs: number[]) {
     try {
       isDeleting = true;
-      console.log("deleted:", taskIDs);
 
       const res = await fetch(`${serverUrl}/delete-tasks`, {
         method: "DELETE",
@@ -931,7 +862,8 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
       if (isEditMode) taskModal.close();
 
       updateHeaderActionsVisibility();
-      renderTasks();
+
+      await refreshTasks();
     } catch {
       console.log("Error deleting tasks");
     } finally {
