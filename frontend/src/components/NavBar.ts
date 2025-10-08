@@ -1,4 +1,4 @@
-import { Ainz, Kumoko, Rimuru } from "../constants/Imaages";
+import { Ainz, Kumoko, Rimuru } from "../constants/Images";
 import "../styles/NavBar.css";
 import ColorSchemeButton from "./ColorSchemeButton";
 import { SharedTaskSwitch } from "../utils/SharedTaskSwitch";
