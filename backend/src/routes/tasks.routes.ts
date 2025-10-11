@@ -1,5 +1,6 @@
 import express from "express";
 import { createClient } from "@supabase/supabase-js";
+import { CheckPassword } from "../auth/CheckPassword";
 
 const TasksRoutes = express.Router();
 
@@ -8,7 +9,7 @@ const supabaseKey = process.env.SUPABASE_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // GET tasks
-TasksRoutes.get("/get-tasks", async (_req, res) => {
+TasksRoutes.get("/get-tasks", CheckPassword, async (_req, res) => {
   try {
     const { data, error } = await supabase.from("todolist_tasks").select("*");
 
@@ -21,7 +22,7 @@ TasksRoutes.get("/get-tasks", async (_req, res) => {
 });
 
 // POST add tasks
-TasksRoutes.post("/add-task", async (req, res) => {
+TasksRoutes.post("/add-task", CheckPassword, async (req, res) => {
   try {
     const taskname: string = req.body.taskname;
 
@@ -39,7 +40,7 @@ TasksRoutes.post("/add-task", async (req, res) => {
 });
 
 // POST update tasks
-TasksRoutes.post("/update-task", async (req, res) => {
+TasksRoutes.post("/update-task", CheckPassword, async (req, res) => {
   try {
     const taskname = req.body.taskname;
     const taskid = req.body.taskid;
@@ -61,7 +62,7 @@ TasksRoutes.post("/update-task", async (req, res) => {
 });
 
 // POST update check tasks
-TasksRoutes.post("/update-check-tasks", async (req, res) => {
+TasksRoutes.post("/update-check-tasks", CheckPassword, async (req, res) => {
   try {
     const tasks: { id: string; isCompleted: boolean }[] = req.body;
 
@@ -86,7 +87,7 @@ TasksRoutes.post("/update-check-tasks", async (req, res) => {
 });
 
 // DELETE tasks
-TasksRoutes.delete("/delete-tasks", async (req, res) => {
+TasksRoutes.delete("/delete-tasks", CheckPassword, async (req, res) => {
   try {
     const taskIDs: string[] = req.body.ids;
 

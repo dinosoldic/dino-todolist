@@ -8,6 +8,7 @@ import {
 } from "../constants/SVGIcons";
 import "../styles/TaskTable.css";
 import { SharedTaskSwitch } from "../utils/SharedTaskSwitch";
+import GetCookies from "../utils/GetCookies";
 
 interface TaskTypes {
   id: number;
@@ -26,9 +27,16 @@ interface SortOrderTypes {
 }
 
 // funcs
-async function getTasks(serverUrl: string) {
+async function getTasks(serverUrl: string, pass: string) {
   try {
-    const res = await fetch(`${serverUrl}/get-tasks?t=${Date.now()}`);
+    const res = await fetch(`${serverUrl}/get-tasks?t=${Date.now()}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-pass": pass,
+      },
+    });
+
     if (!res.ok) throw new Error();
     const rawTasks = await res.json();
 
@@ -50,6 +58,9 @@ async function getTasks(serverUrl: string) {
 
 // main func
 export default function TaskTable(serverUrl: string): HTMLDivElement {
+  // auth
+  const pass = GetCookies("pass") ?? "";
+
   //// vars
   // tasks
   let defaultTask: TaskTypes = {
@@ -447,13 +458,13 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
   }
 
   // fetch tasks
-  getTasks(serverUrl).then((fetchedTasks) => {
+  getTasks(serverUrl, pass).then((fetchedTasks) => {
     allTasks = fetchedTasks;
     filterAndRenderTasks();
   });
 
   async function refreshTasks() {
-    allTasks = await getTasks(serverUrl);
+    allTasks = await getTasks(serverUrl, pass);
     filterAndRenderTasks();
   }
 
@@ -795,7 +806,7 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
 
       const res = await fetch(`${serverUrl}${route}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-admin-pass": pass },
         body: JSON.stringify({ taskname, taskid }),
       });
 
@@ -820,7 +831,7 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
     try {
       const res = await fetch(`${serverUrl}/update-check-tasks`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-admin-pass": pass },
         body: JSON.stringify(tasks),
       });
 
@@ -846,7 +857,7 @@ export default function TaskTable(serverUrl: string): HTMLDivElement {
 
       const res = await fetch(`${serverUrl}/delete-tasks`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-admin-pass": pass },
         body: JSON.stringify({ ids: taskIDs }),
       });
 
