@@ -7,7 +7,7 @@ import GetCookies from "./utils/GetCookies";
 const appRoot = document.getElementById("root")!;
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
-async function checkServer(url: string, retries = 50, delay = 100000) {
+async function checkServer(url: string, retries = 50, delay = 500) {
   for (let i = 0; i < retries; i++) {
     try {
       const res = await fetch(`${url}/test-status`);
