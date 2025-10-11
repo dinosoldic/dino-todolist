@@ -8,6 +8,11 @@ export default function Login(
   const login = document.createElement("div");
   login.className = "login";
 
+  // Set background color based on saved theme
+  const savedTheme = localStorage.getItem("theme");
+  login.style.backgroundColor = savedTheme === "dark" ? "#242424" : "#f5f5f5";
+  login.style.color = savedTheme === "dark" ? "#f5f5f5" : "#242424";
+
   const loginForm = document.createElement("form");
   loginForm.className = "login-form";
 
@@ -25,6 +30,8 @@ export default function Login(
   pass.type = "password";
   pass.id = "password";
   pass.name = "password";
+  pass.style.backgroundColor = savedTheme === "dark" ? "#242424" : "#f5f5f5";
+  pass.style.color = savedTheme === "dark" ? "#f5f5f5" : "#242424";
 
   const showPass = document.createElement("div");
   showPass.title = "Show/hide password";
@@ -43,6 +50,7 @@ export default function Login(
   submit.title = "Log In";
   submit.textContent = "Log In";
   submit.className = "login-submit";
+  pass.style.color = savedTheme === "dark" ? "#f5f5f5" : "#242424";
 
   login.appendChild(loginForm);
   loginForm.appendChild(loginContainer);

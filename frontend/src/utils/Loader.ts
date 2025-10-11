@@ -4,6 +4,10 @@ export default function Loader(): HTMLDivElement {
   const loader = document.createElement("div");
   loader.className = "loader";
 
+  // Set background color based on saved theme
+  const savedTheme = localStorage.getItem("theme");
+  loader.style.backgroundColor = savedTheme === "dark" ? "#242424" : "#f5f5f5";
+
   const loaderContainer = document.createElement("div");
   loaderContainer.className = "loader-container";
 
