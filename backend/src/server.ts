@@ -5,7 +5,7 @@ import cors from "cors";
 
 dotenv.config(); // import dotenv first for correct env usage
 
-import { TasksRoutes } from "./routes";
+import { GetStatus, Login, TasksRoutes } from "./routes";
 
 const PORT: number = parseInt(process.env.PORT as string, 10);
 const app = express();
@@ -27,6 +27,8 @@ app.use(
 app.use(express.json());
 
 // Routes
+app.use(GetStatus);
+app.use(Login);
 app.use(TasksRoutes);
 
 app.listen(PORT, () =>
