@@ -50,7 +50,7 @@ export default function Login(
   submit.title = "Log In";
   submit.textContent = "Log In";
   submit.className = "login-submit";
-  pass.style.color = savedTheme === "dark" ? "#f5f5f5" : "#213547";
+  submit.style.color = savedTheme === "dark" ? "#f5f5f5" : "#213547";
 
   login.appendChild(loginForm);
   loginForm.appendChild(loginContainer);
